@@ -1,5 +1,6 @@
-FROM openjdk:11
+FROM eclipse-temurin:11
 
-COPY target/demo-app.jar app.jar
+WORKDIR /app
+COPY target/*.jar app.jar
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+CMD ["java", "-jar", "app.jar"]
