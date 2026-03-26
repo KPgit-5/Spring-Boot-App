@@ -11,12 +11,15 @@ public class SecretsManagerService {
 
     public static Map<String, String> getSecret() {
 
-        String secretName = "my-db-secret";   // 👈 change if needed
-        Region region = Region.US_EAST_1;     // 👈 change region
+        String secretName = "kpsecret";
+
+        String regionEnv = System.getenv("AWS_REGION");
+        Region region = Region.of(regionEnv != null ? regionEnv : "us-east-1");
 
         SecretsManagerClient client = SecretsManagerClient.builder()
                 .region(region)
                 .build();
+
         GetSecretValueRequest request = GetSecretValueRequest.builder()
                 .secretId(secretName)
                 .build();
