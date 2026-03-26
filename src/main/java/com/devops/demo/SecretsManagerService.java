@@ -11,9 +11,14 @@ public class SecretsManagerService {
 
     public static Map<String, String> getSecret() {
 
-        String secretName = "kpsecret";
-
+        // ✅ ENV variables se lo (BEST PRACTICE)
+        String secretName = System.getenv("SECRET_NAME");
         String regionEnv = System.getenv("AWS_REGION");
+
+        if (secretName == null || secretName.isEmpty()) {
+            throw new RuntimeException("SECRET_NAME environment variable not set");
+        }
+
         Region region = Region.of(regionEnv != null ? regionEnv : "us-east-1");
 
         SecretsManagerClient client = SecretsManagerClient.builder()
