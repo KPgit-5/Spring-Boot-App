@@ -23,10 +23,11 @@ public class HelloController {
             String password = secret.get("password");
             String dbname = secret.get("dbname");
 
-            // ✅ Extra safe (even if JSON numeric ho)
             String port = String.valueOf(secret.get("port"));
 
-            String url = "jdbc:mysql://" + host + ":" + port + "/" + dbname + "?useSSL=false&serverTimezone=UTC";
+            // ✅ FINAL FIXED JDBC URL
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + dbname +
+                         "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 
             Connection conn = DriverManager.getConnection(url, username, password);
 
