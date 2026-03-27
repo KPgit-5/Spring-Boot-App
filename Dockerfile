@@ -1,9 +1,14 @@
-FROM eclipse-temurin:17-jdk-jammy
+# 🔥 Lightweight base image (JRE only, not full JDK)
+FROM eclipse-temurin:17-jre-jammy
 
+# App directory
 WORKDIR /app
 
-COPY target/*.jar app.jar
+# Copy jar
+COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
 
+# Port
 EXPOSE 8070
 
-ENTRYPOINT ["java","-jar","app.jar"]
+# Run app (optimized JVM flags)
+ENTRYPOINT ["java","-XX:+UseContainerSupport","-XX:MaxRAMPercentage=75.0","-jar","app.jar"]
