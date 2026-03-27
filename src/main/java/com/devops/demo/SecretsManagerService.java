@@ -5,13 +5,14 @@ import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import java.util.Map;
 
 public class SecretsManagerService {
 
     public static Map<String, String> getSecret() {
 
-        // ✅ ENV variables se lo (BEST PRACTICE)
         String secretName = System.getenv("SECRET_NAME");
         String regionEnv = System.getenv("AWS_REGION");
 
@@ -33,7 +34,10 @@ public class SecretsManagerService {
 
         try {
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(secretString, Map.class);
+
+            // ✅ FIX: Proper type conversion
+            return mapper.readValue(secretString, new TypeReference<Map<String, String>>() {});
+
         } catch (Exception e) {
             throw new RuntimeException("Error parsing secret", e);
         }
