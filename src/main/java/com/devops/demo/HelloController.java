@@ -22,16 +22,16 @@ public class HelloController {
             String username = secret.get("username");
             String password = secret.get("password");
             String dbname = secret.get("dbname");
+            String port = secret.get("port");
 
-            String port = String.valueOf(secret.get("port"));
-
-            // ✅ FINAL FIXED JDBC URL
+            // ✅ CLEAN JDBC URL
             String url = "jdbc:mysql://" + host + ":" + port + "/" + dbname +
-                         "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+                         "?useSSL=false&serverTimezone=UTC";
 
             Connection conn = DriverManager.getConnection(url, username, password);
 
             if (conn != null && !conn.isClosed()) {
+                conn.close(); // ✅ connection close karna good practice hai
                 return "✅ DB Connected Successfully!";
             } else {
                 return "❌ DB Connection Failed";
