@@ -17,29 +17,27 @@ public class SecretsManagerService {
         String regionEnv = System.getenv("AWS_REGION");
 
         if (secretName == null || secretName.isEmpty()) {
-            throw new RuntimeException("SECRET_NAME environment variable not set");
+            throw new RuntimeException("❌ SECRET_NAME environment variable not set");
         }
 
         Region region = Region.of(regionEnv != null ? regionEnv : "us-east-1");
 
-        SecretsManagerClient client = SecretsManagerClient.builder()
+        try (SecretsManagerClient client = SecretsManagerClient.builder()
                 .region(region)
-                .build();
+                .build()) {
 
-        GetSecretValueRequest request = GetSecretValueRequest.builder()
-                .secretId(secretName)
-                .build();
+            GetSecretValueRequest request = GetSecretValueRequest.builder()
+                    .secretId(secretName)
+                    .build();
 
-        String secretString = client.getSecretValue(request).secretString();
+            String secretString = client.getSecretValue(request).secretString();
 
-        try {
             ObjectMapper mapper = new ObjectMapper();
 
-            // ✅ FIX: Proper type conversion
             return mapper.readValue(secretString, new TypeReference<Map<String, String>>() {});
 
         } catch (Exception e) {
-            throw new RuntimeException("Error parsing secret", e);
+            throw new RuntimeException("❌ Error retrieving/parsing secret: " + e.getMessage(), e);
         }
     }
 }
