@@ -10,7 +10,7 @@ public class HelloController {
 
     @GetMapping("/")
     public String hello() {
-        return "jenkins pipeline verify hogyi KP congrats";
+        return "final done 14 april";
     }
 
     @GetMapping("/db-test")
@@ -32,7 +32,7 @@ public class HelloController {
 
             if (conn != null && !conn.isClosed()) {
                 conn.close(); // ✅ connection close karna good practice hai
-                return "✅ Ye bhii verfied hurrayyyy";
+                return "✅ health check b tested good";
             } else {
                 return "❌ DB Connection Failed";
             }
